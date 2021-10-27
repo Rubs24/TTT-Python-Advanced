@@ -166,6 +166,7 @@ def block():
 def one_player_game():
     global cp
     global board
+    global game_ongoing
     global difficulty
     difficulty = input("Welcome! Select the difficulty of the game (e/m/h): ")
     print('\n')
@@ -187,4 +188,5 @@ def one_player_game():
     board = [ "-","-","-",
           "-","-","-",
           "-","-","-", ]
+    game_ongoing = True
     
