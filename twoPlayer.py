@@ -34,7 +34,7 @@ def two_player_game():
         handle_turn(current_player)
         game_ongoing = check_game_over(board)
         current_player = flip_player(current_player)
-    end_reset()
+    end_reset(2)
     current_player = "X"
     board = [ "-","-","-",
           "-","-","-",

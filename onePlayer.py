@@ -57,7 +57,7 @@ def easy_ai():
 ##### Medium AI selects cells at random if it's not a critcal move #####
 def med_ai():
     global board
-    if board.count("-") > len(board)-1:
+    if board.count("-") > len(board)-3:
        pos = easy_ai()
     else:
         ctw = close_to_win()
@@ -93,7 +93,7 @@ def hard_ai():
     elif board.count("-") > len(board)-5:
         cm = check_crit_move()
         if cm != None:
-            pos = check_crit_move()
+            pos = cm
         else:
             if middle:
                 #check for side
@@ -130,30 +130,36 @@ def check_crit_move():
 def close_to_win():
     length = len(board)
     i=0
-    while i < length:
-        if board[i] == '-':
-            board[i] = 'O'
-            if check_win(board)=='O':
-                return i
-            else:
-                board[i]='-'
-        i+=1
+    global game_ongoing
+    global difficulty
+    if game_ongoing:
+        while i < length:
+            if board[i] == '-':
+                board[i] = 'O'
+                if check_win(board)=='O':
+                    game_ongoing = False
+                    return i
+                else:
+                    board[i]='-'
+            i+=1
     return None
 
 ###### Stop a player from winning ######
 def block():
+    global difficulty
+    global game_ongoing
     length = len(board)
     i=0
-    while i < length:
-        if board[i] == '-':
-            board[i] = 'X'
-            if check_win(board)=='O':
-                end_reset()
-                board[i]='-'
-                return i
-            else:
-                board[i]='-'
-        i+=1
+    if game_ongoing:
+        while i < length:
+            if board[i] == '-':
+                board[i] = 'X'
+                if check_win(board)=='O':
+                    board[i]='-'
+                    return i
+                else:
+                    board[i]='-'
+            i+=1
     return None
 
 ##### Game Engine #####
@@ -168,6 +174,7 @@ def one_player_game():
     if difficulty=='e' or difficulty=='m':
         cp = "X"
     else:
+        difficulty='h'
         cp = 'O'
     game_ongoing = True
     while game_ongoing:
@@ -175,7 +182,7 @@ def one_player_game():
         game_ongoing = check_game_over(board)
         cp = flip_player(cp)
         display_board(board)
-    end_reset()
+    end_reset(1,difficulty)
     cp = "X"
     board = [ "-","-","-",
           "-","-","-",
